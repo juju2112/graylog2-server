@@ -1,5 +1,6 @@
 // @flow strict
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import styled, { type StyledComponent } from 'styled-components';
 
@@ -13,7 +14,7 @@ const ErrorMessage: StyledComponent<{}, ThemeInterface, HTMLDivElement> = styled
 `);
 
 type Props = {
-  component?: typeof Field,
+  component: typeof Field,
   label: string,
   name: string,
   type?: string,
@@ -54,6 +55,17 @@ const FormikInput = ({ component: Component, label, name, type, help, validate, 
 );
 
 FormikInput.ErrorMessage = ErrorMessage;
+
+FormikInput.propTypes = {
+  component: PropTypes.element,
+  help: PropTypes.object,
+  labelClassName: PropTypes.string,
+  type: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  wrapperClassName: PropTypes.string,
+  validate: PropTypes.func,
+};
 
 FormikInput.defaultProps = {
   component: Field,

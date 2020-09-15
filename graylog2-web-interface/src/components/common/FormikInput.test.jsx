@@ -6,8 +6,8 @@ import { render, fireEvent, waitFor } from 'wrappedTestingLibrary';
 import FormikInput from './FormikInput';
 
 describe('<FormikInput />', () => {
-  const SimpleForm = ({ children, onSubmit, initialValues }: { children: React.Node, onSubmit: () => {}, initialValues: { [string]: mixed }}) => (
-    <Formik onSubmit={(data) => onSubmit(data)} initialValues={initialValues || {}}>
+  const SimpleForm = ({ children, onSubmit, initialValues }: { children: React.Node, onSubmit: (any) => Promise<any>, initialValues?: { [string]: mixed }}) => (
+    <Formik onSubmit={(data) => onSubmit(data)} initialValues={initialValues}>
       {() => (
         <Form>
           {children}
@@ -16,6 +16,10 @@ describe('<FormikInput />', () => {
       )}
     </Formik>
   );
+
+  SimpleForm.defaultProps = {
+    initialValues: {},
+  };
 
   it('should update and submit correct value', async () => {
     const submitStub = jest.fn();
