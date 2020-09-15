@@ -15,10 +15,10 @@ const ErrorMessage: StyledComponent<{}, ThemeInterface, HTMLDivElement> = styled
 
 type Props = {
   component: typeof Field,
-  label: string,
+  label?: string,
   name: string,
   type?: string,
-  help?: string,
+  help?: React.Node,
   labelClassName?: string,
   wrapperClassName?: string,
   validate?: (string) => ?string,
@@ -46,9 +46,7 @@ const FormikInput = ({ component: Component, label, name, type, help, validate, 
                name={name}
                onChange={onChange}
                type={type}
-               {...typeSepcificProps}>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-        </Input>
+               {...typeSepcificProps} />
       );
     }}
   </Component>
@@ -57,11 +55,11 @@ const FormikInput = ({ component: Component, label, name, type, help, validate, 
 FormikInput.ErrorMessage = ErrorMessage;
 
 FormikInput.propTypes = {
-  component: PropTypes.element,
-  help: PropTypes.object,
+  component: PropTypes.func,
+  help: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   labelClassName: PropTypes.string,
   type: PropTypes.string,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   name: PropTypes.string.isRequired,
   wrapperClassName: PropTypes.string,
   validate: PropTypes.func,
@@ -72,6 +70,7 @@ FormikInput.defaultProps = {
   help: undefined,
   labelClassName: undefined,
   type: 'text',
+  label: undefined,
   validate: () => {},
   wrapperClassName: undefined,
 };
