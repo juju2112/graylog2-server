@@ -149,7 +149,7 @@
     "webpack-dev-middleware": "^3.7.1",
     "webpack-dev-server": "^3.8.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^4.2.2",
+    "webpack-merge": "^5.7.3",
     "yargs": "^15.3.1"
   },
   "resolutions": {
