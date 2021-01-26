@@ -1,18 +1,18 @@
-/**
- * This file is part of Graylog.
+/*
+ * Copyright (C) 2020 Graylog, Inc.
  *
- * Graylog is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the Server Side Public License, version 1,
+ * as published by MongoDB, Inc.
  *
- * Graylog is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * Server Side Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with Graylog.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the Server Side Public License
+ * along with this program. If not, see
+ * <http://www.mongodb.com/licensing/server-side-public-license>.
  */
 package org.graylog2.storage.providers;
 
@@ -64,15 +64,14 @@ public class ElasticsearchVersionProvider implements Provider<Version> {
         }
 
         try {
-            return this.cachedVersion.get(() -> this.versionProbe.probe(this.elasticsearchHosts))
-                    .map(this::majorVersionFrom)
+            return this.cachedVersion.get(() -> {
+                final Optional<Version> probedVersion = this.versionProbe.probe(this.elasticsearchHosts);
+                probedVersion.ifPresent(version -> LOG.info("Elasticsearch cluster is running v" + version));
+                return probedVersion;
+            })
                     .orElseThrow(() -> new ElasticsearchProbeException(NO_HOST_REACHABLE_ERROR + "!"));
         } catch (ExecutionException | InterruptedException e) {
             throw new ElasticsearchProbeException(NO_HOST_REACHABLE_ERROR + ": ", e);
         }
-    }
-
-    private Version majorVersionFrom(Version version) {
-        return Version.from(version.getVersion().getMajorVersion(), 0, 0);
     }
 }
